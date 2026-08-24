@@ -1,6 +1,9 @@
 ---
 layout: recipe
 title: Zupa kurkowa
+date: 2026-08-24 12:00:00 +0200
+categories: [Recipes, Polish]
+tags: [vegetarian, soup, mushrooms, chanterelles, dill, potatoes]
 description: Chanterelle soup with dill, potatoes and soured cream
 cuisine: Polish
 prep_time: 20 min

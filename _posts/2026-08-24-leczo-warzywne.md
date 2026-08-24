@@ -1,6 +1,9 @@
 ---
 layout: recipe
 title: Leczo warzywne
+date: 2026-08-24 12:00:00 +0200
+categories: [Recipes, Polish]
+tags: [vegetarian, vegan, one-pot, peppers, courgette, aubergine, mushrooms]
 description: One-pot stew of peppers, courgette, aubergine and mushrooms
 cuisine: Polish
 prep_time: 30 min

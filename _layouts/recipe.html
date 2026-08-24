@@ -1,43 +1,43 @@
 ---
-layout: default
+layout: post
 ---
 {%- comment -%}
-  Renders a recipe in the fixed order every recipe follows:
-  1. title + times / servings / diet tags   2. ingredients (English)
-  3. ingredients (Dutch)                    4. method (English)
+  Wraps Chirpy's `post` layout so every recipe renders in the fixed order:
+  1. title + times / servings / diet   2. ingredients (English)
+  3. ingredients (Dutch)               4. method (English)
   5. source URL
-  Items 1 and 5 come from front matter and are rendered here; items 2-4 are
-  the body of the markdown file. See CLAUDE.md for the file template.
+  Items 1 and 5 come from front matter and are rendered here; 2-4 are the body
+  of the markdown file. See CLAUDE.md for the file template.
 {%- endcomment -%}
-<article class="prose recipe">
-  <div class="page-head">
-    <h1>{{ page.title }}</h1>
-    {%- if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
 
-    {%- capture meta -%}
-      {%- if page.prep_time %}<li><span class="k">Prep</span> {{ page.prep_time }}</li>{% endif -%}
-      {%- if page.cook_time %}<li><span class="k">Cook</span> {{ page.cook_time }}</li>{% endif -%}
-      {%- if page.total_time %}<li><span class="k">Total</span> {{ page.total_time }}</li>{% endif -%}
-      {%- if page.servings %}<li><span class="k">Serves</span> {{ page.servings }}</li>{% endif -%}
-      {%- if page.cuisine %}<li><span class="k">Cuisine</span> {{ page.cuisine }}</li>{% endif -%}
-    {%- endcapture -%}
-    {%- if meta != "" %}<ul class="meta">{{ meta }}</ul>{% endif %}
+{%- capture meta -%}
+  {%- if page.prep_time %}<li><span class="k">Prep</span> {{ page.prep_time }}</li>{% endif -%}
+  {%- if page.cook_time %}<li><span class="k">Cook</span> {{ page.cook_time }}</li>{% endif -%}
+  {%- if page.total_time %}<li><span class="k">Total</span> {{ page.total_time }}</li>{% endif -%}
+  {%- if page.servings %}<li><span class="k">Makes</span> {{ page.servings }}</li>{% endif -%}
+  {%- if page.cuisine %}<li><span class="k">Cuisine</span> {{ page.cuisine }}</li>{% endif -%}
+{%- endcapture -%}
 
-    {%- if page.diet %}
-      {%- assign diet_list = page.diet | join: "|" | split: "|" %}
-    <ul class="tags">
-      {%- for t in diet_list %}<li>{{ t | strip }}</li>{% endfor %}
-    </ul>
-    {%- endif %}
-  </div>
-
-  {{ content }}
-
-  {%- if page.source_url %}
-  <div class="source">
-    <h2>Source</h2>
-    <p><a href="{{ page.source_url }}" rel="noopener nofollow">{{ page.source_url }}</a>
-    {%- if page.source_lang %} <span class="muted">(original in {{ page.source_lang }})</span>{% endif %}</p>
-  </div>
+{%- if meta != "" or page.diet %}
+<div class="recipe-head">
+  {%- if meta != "" %}
+  <ul class="recipe-meta">{{ meta }}</ul>
   {%- endif %}
-</article>
+  {%- if page.diet %}
+  {%- assign diet_list = page.diet | join: "|" | split: "|" %}
+  <ul class="recipe-diet">
+    {%- for t in diet_list %}<li>{{ t | strip }}</li>{% endfor %}
+  </ul>
+  {%- endif %}
+</div>
+{%- endif %}
+
+{{ content }}
+
+{%- if page.source_url %}
+<div class="recipe-source">
+  <h2 id="source">Source</h2>
+  <p><a href="{{ page.source_url }}" rel="noopener nofollow">{{ page.source_url }}</a>
+  {%- if page.source_lang %} <span class="muted">(original in {{ page.source_lang }})</span>{% endif %}</p>
+</div>
+{%- endif %}

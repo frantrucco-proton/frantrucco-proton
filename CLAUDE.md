@@ -5,80 +5,63 @@ Conventions for this repo. Read this before making any change here.
 ## What this repo is
 
 A small personal reference site published with **GitHub Pages**. Recipes are
-the first section; more sections will follow (Dutch taxes, notes on cities,
-useful websites for finding housing). It is built by GitHub Pages' own Jekyll
-build from the default branch — no build step, no Actions workflow.
+the first section; more will follow (Dutch taxes, notes on cities, useful
+websites for finding housing).
 
 - Live site: <https://frantrucco-proton.github.io/frantrucco-proton/>
-- This repo is also the GitHub **profile README** repo, so `README.md` shows on
-  the profile page. Keep it short and presentable.
+- This repo is currently also the GitHub **profile README** repo. Francisco has
+  decided to rename it to `frantrucco-proton.github.io` so the site is served
+  from the bare root; that rename ends the profile README (GitHub only renders
+  it from a repo named exactly after the user). See *Renaming* below.
 
 **The live site is the only output.** Never build an offline bundle, a
 single-file HTML export, a PDF, or a zip of the site. If something should be
 readable, it goes on the site.
 
+## How it is built — read this before touching the build
+
+The site uses the **Chirpy** theme (`jekyll-theme-chirpy`, a gem), which needs
+Jekyll 4 and the `jekyll-archives` and `jekyll-include-cache` plugins. None of
+that is available in GitHub Pages' native build, so:
+
+- **The site is built by GitHub Actions**, not by Pages' own Jekyll.
+  `.github/workflows/pages-deploy.yml` builds and deploys it.
+- Settings → Pages → Source must stay on **GitHub Actions**. Switching it back
+  to "Deploy from a branch" would try the native build and fail.
+- **A push is a deploy attempt, not a deploy.** If the workflow fails, nothing
+  ships and the previous version stays live. Always build locally first.
+- The workflow also runs `html-proofer` over the built site. A broken internal
+  link fails the build and blocks the deploy.
+
 ## Repo layout
 
 ```
-_config.yml            site settings (title, baseurl, markdown)
-_layouts/
-  default.html         page shell: header, auto-built nav, footer
-  home.html            front page: lists every section
-  section.html         a section index: auto-lists the pages in its folder
-  page.html            a plain content page
-  recipe.html          a recipe page
-assets/css/style.css   the entire design (no theme gem, no framework, no web fonts)
-index.md               front page
-recipes/
-  index.md             the Recipes section index
-  websites.md          sites to search for recipes
-  <slug>.md            one file per recipe
+_config.yml              Chirpy configuration
+_layouts/recipe.html     the only custom layout; wraps Chirpy's `post`
+_posts/                  one file per recipe, YYYY-MM-DD-<slug>.md
+_tabs/                   sidebar tabs (about, categories, tags, archives)
+_plugins/                posts-lastmod-hook.rb, from the Chirpy starter
+assets/css/jekyll-theme-chirpy.scss   theme entry point plus custom recipe styles
+recipes/websites.md      sites to search for recipes (a page, not a post)
+index.html               front page, rendered by Chirpy's `home` layout
 ```
 
-## Theme
-
-Hand-rolled minimal layouts plus one ~330-line stylesheet, rather than Minima,
-Hydejack, or al-folio. The reasons: no theme gem or `remote_theme` to pin or
-outgrow, GitHub Pages builds it natively with zero configuration, and the
-mobile typography is set directly instead of being overridden through someone
-else's SCSS variables.
-
-Design rules that must survive any change:
-
-- **Mobile first.** 17px/1.65 body type on phones, 18px from 40em up.
-- **No horizontal scrolling at any width.** Long words wrap, source URLs use
-  `overflow-wrap: anywhere`, media is `max-width: 100%`, `pre` and `table`
-  scroll inside themselves.
-- **Tap-friendly.** Entry links in a list are a full-width block of at least
-  3.25rem (~99px in practice), never a bare inline link.
-- Light and dark both come from `prefers-color-scheme`; every colour is a CSS
-  custom property at the top of the stylesheet.
-- No web fonts, no JavaScript, no external requests.
-
-## Jekyll gotchas that will bite you
-
-- GitHub Pages builds with **Jekyll 3.x**, whose `where_exp` accepts **one**
-  comparison only — `"a and b"` raises a Liquid syntax error. Chain separate
-  `where_exp` filters instead (see `_layouts/section.html`).
-- The site is a *project* site, so it is served under `/frantrucco-proton/`.
-  Link internally with `{{ '/some/path/' | relative_url }}` — a bare `/path/`
-  breaks in production while looking fine locally.
-- `permalink: pretty`, so `recipes/leczo-warzywne.md` becomes
-  `/recipes/leczo-warzywne/`.
+Everything else — layouts, includes, JavaScript, icons — comes from the gem.
+Do not vendor copies of theme files; override through `_layouts/` or the SCSS
+entry point instead, so the theme can be upgraded by bumping the gem.
 
 ## Adding a recipe
 
-1. Create `recipes/<slug>.md`. The slug is lowercase ASCII with hyphens and no
-   diacritics: "Leczo warzywne" becomes `recipes/leczo-warzywne.md`.
+1. Create `_posts/YYYY-MM-DD-<slug>.md`, dated the day it is added. The slug is
+   lowercase ASCII with hyphens and no diacritics: "Leczo warzywne" becomes
+   `_posts/2026-08-24-leczo-warzywne.md`.
 2. Fill in the template below.
-3. Run `bundle exec jekyll build` and confirm the recipe appears on
-   `_site/recipes/index.html` and that its own page rendered.
-4. Commit the recipe file in the **same commit** as anything else needed to
-   make it appear on the site.
+3. Build and check it (see *Verifying a change*).
+4. Commit the recipe in the **same commit** as anything else needed to make it
+   appear on the site.
 
-Nothing needs to be registered anywhere: `_layouts/section.html` lists every
-page in `recipes/` automatically, sorted by title. A recipe shows up as long as
-its file is in `recipes/`, has `layout: recipe`, and has a `title`.
+Nothing needs registering anywhere. The post appears on the front page, under
+its categories and tags, and in the archive, automatically.
 
 ### The recipe file template
 
@@ -86,8 +69,11 @@ Copy this exactly. The order of the sections is fixed.
 
 ```markdown
 ---
-layout: recipe
+layout: recipe                                         # not Chirpy's default `post`
 title: Leczo warzywne
+date: 2026-08-24 12:00:00 +0200
+categories: [Recipes, Polish]                          # always [Recipes, <cuisine>]
+tags: [vegetarian, one-pot, peppers]                   # lowercase
 description: Polish pepper and courgette stew          # one line, shown in the list
 cuisine: Polish
 prep_time: 15 min                                      # omit any field the source lacks
@@ -115,10 +101,16 @@ source_lang: Polish
 - ...
 ```
 
-This produces the required page order: **title with times, servings and diet
-tags → English ingredients → Dutch ingredients → method in English → source
-URL**. Items 1 and 5 come from front matter and are rendered by
-`_layouts/recipe.html`; do not repeat the title or the source link in the body.
+`layout: recipe` matters: Chirpy's default for posts is `layout: post`, which
+would drop the times, the diet tags and the source link. `_layouts/recipe.html`
+renders those around the body, producing the required order — **title with
+times, servings and diet tags → English ingredients → Dutch ingredients →
+method in English → source URL**. Do not repeat the title or the source link in
+the body.
+
+Where a source splits its ingredients into groups, keep the groups, as a bold
+lead-in above each bulleted list, and keep them identical in both languages
+(see `risotto-z-kurkami`).
 
 ### Recipe rules
 
@@ -134,6 +126,9 @@ URL**. Items 1 and 5 come from front matter and are rendered by
   and anything it changes about the method. The page links to the original, so
   every deviation from that original is stated on the page — never silently.
   `diet:` describes the version on the page, not the source.
+- Where a source offers a choice that straddles the rule — "chicken or
+  vegetable stock" — take the vegetarian option and say on the page that this
+  is what the page does.
 - **No tables. Ever.** Ingredients are bulleted lists, method steps are a
   numbered list. This holds for both language versions.
 - The two ingredient lists must be the same ingredients in the same order, so
@@ -142,10 +137,12 @@ URL**. Items 1 and 5 come from front matter and are rendered by
 - **Translate from the source language, not from a guess.** Check the original
   words rather than reasoning from a rough English translation, especially
   mushrooms, fish, and cuts of meat, where a wrong guess produces a plausible
-  but wrong ingredient (Polish `podgrzybek` is a bay bolete, not "brown
-  mushroom"; `karkówka` is pork collar/neck, not "pork chop"). Dutch names come
-  from what Dutch supermarkets actually print on the packet — `runderriblappen`,
-  `speklapjes`, `sperziebonen` — not a literal rendering of the English.
+  but wrong ingredient (Polish `kurki` are chanterelles, not anything to do with
+  `kura`, a hen; `pieczarki` are ordinary button mushrooms; `podgrzybek` is a
+  bay bolete, not "brown mushroom"; `karkówka` is pork collar/neck, not "pork
+  chop"). Dutch names come from what Dutch supermarkets actually print on the
+  packet — `gezeefde tomaten`, `gerookte paprikapoeder`, `sperziebonen` — not a
+  literal rendering of the English.
 - **Flag anything hard to find in the Netherlands** in `Substitutions and
   notes`, with a concrete substitute and where to look (Polish shop, toko,
   Turkish supermarket). Example: Polish `twaróg` — closest is Dutch
@@ -156,50 +153,47 @@ URL**. Items 1 and 5 come from front matter and are rendered by
 
 **Search for vegetarian recipes only** — see the first two Recipe rules above.
 Where a site has its own vegetarian category (aniagotuje.pl files them under
-`wegetariańskie`), search inside it rather than sifting general results by
+`dania bez mięsa`), search inside it rather than sifting general results by
 hand, and still read the ingredient list before proposing the recipe.
 
 `recipes/websites.md` is the list of sites to search **first**, in order,
 before looking anywhere else. Add new sites there as bullets.
 
 If a site cannot be reached — the sandbox egress proxy blocks some domains with
-a 403 — say so plainly and ask for the recipe text. **Never invent recipe
-content and attribute it to a source URL.** A recipe page carries a link to the
-original, so its contents have to actually match that original.
+a 403, aniagotuje.pl among them — say so plainly and ask for the recipe text.
+**Never invent recipe content and attribute it to a source URL.** A recipe page
+carries a link to the original, so its contents have to actually match that
+original.
 
 ## Adding a new section
 
-One file. Create `<section>/index.md`:
+Sections are **categories**. A new one needs no configuration: give the posts
+`categories: [Dutch taxes, ...]` and the category appears on the Categories tab
+with its posts under it.
 
-```markdown
----
-layout: section
-title: Dutch taxes
-order: 2                                    # position in the nav and on the front page
-description: Working out what I owe and when.
-empty_message: Nothing here yet.
----
+For a section that is a single reference page rather than a set of posts, add a
+page with `layout: page` and an explicit `permalink:`, as `recipes/websites.md`
+does. To put something in the sidebar, add a file to `_tabs/` with an `icon:`
+(Font Awesome class) and an `order:`.
 
-Optional intro paragraph.
-```
+## Renaming the repo
 
-That is all. The section appears in the header nav and on the front page
-automatically, and every page you drop in that folder is listed on it.
+Francisco has chosen to rename this repo to `frantrucco-proton.github.io` so
+the site is served from `https://frantrucco-proton.github.io/`. When that
+happens:
 
-Pages inside a section use `layout: page` (or a purpose-built layout, as
-recipes do) and need `title` plus a one-line `description`. Add
-`unlisted: true` to keep a page out of its section's list —
-`recipes/websites.md` uses this because it is a reference page, not a recipe.
+1. Set `baseurl: ""` in `_config.yml` (it is `"/frantrucco-proton"` today).
+2. Update the live-site URL at the top of this file and in `README.md`.
+3. Point the local remote at the new name; GitHub redirects the old one, but
+   being explicit avoids surprises.
+
+The profile README stops rendering on the GitHub profile at that point. That
+is a known and accepted cost of the rename.
 
 ## Working in this repo
 
 **Work on `main` and push to `main`.** No feature branches, no pull requests,
 unless Francisco asks for one in so many words.
-
-GitHub Pages rebuilds the site from `main` on every push, so a push is a
-deploy. Build locally first — the section below is not optional here, because
-a failed build on GitHub Pages leaves the previous version live without
-saying anything.
 
 ## Verifying a change
 
@@ -209,9 +203,19 @@ bundle exec jekyll build       # must finish without errors
 bundle exec jekyll serve       # http://127.0.0.1:4000/frantrucco-proton/
 ```
 
-A Liquid or YAML error fails the build here and silently keeps the old site
-live on GitHub Pages, so always build before committing. Check any layout or
-CSS change at a 390px-wide viewport too.
+Before pushing, run what CI runs, or CI will find it instead:
 
-`Gemfile` exists only for local previews; GitHub Pages ignores it and builds
-with its own pinned Jekyll.
+```bash
+JEKYLL_ENV=production bundle exec jekyll b -d "_site/frantrucco-proton"
+LANG=C.UTF-8 bundle exec htmlproofer _site --disable-external \
+  --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
+```
+
+`LANG=C.UTF-8` is not optional in a bare container: without it Ruby defaults to
+US-ASCII and html-proofer dies on the first accented character rather than
+reporting a real problem.
+
+Check any layout or CSS change at a 390px-wide viewport, in both light and dark
+mode. Chirpy pulls fonts and icons from a CDN, so in a sandbox that blocks
+outbound requests the icons will be missing locally while being fine in a real
+browser — do not "fix" that.

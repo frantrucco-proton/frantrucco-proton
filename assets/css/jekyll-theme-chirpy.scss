@@ -1,0 +1,105 @@
+---
+---
+
+@use 'abstracts/variables' with (
+  $theme: '{{ site.theme_mode }}'
+);
+
+/* prettier-ignore */
+@use 'main
+{%- if jekyll.environment == 'production' -%}
+  .bundle
+{%- endif -%}
+';
+
+/* ---------------------------------------------------------------------------
+   Recipe furniture. Colours all come from Chirpy's own custom properties, so
+   light and dark modes follow the theme without a second set of rules.
+   --------------------------------------------------------------------------- */
+
+.recipe-head {
+  margin-bottom: 1.5rem;
+}
+
+.recipe-meta,
+.recipe-diet {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recipe-meta {
+  gap: 0.4rem 0.45rem;
+  font-size: 0.875rem;
+
+  li {
+    background: var(--card-bg);
+    border: 1px solid var(--main-border-color);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    color: var(--text-color);
+  }
+
+  .k {
+    color: var(--label-color);
+    margin-right: 0.35rem;
+    font-size: 0.8125rem;
+  }
+}
+
+.recipe-diet {
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-size: 0.8125rem;
+
+  li {
+    border: 1px solid var(--main-border-color);
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    color: var(--label-color);
+  }
+}
+
+/* Ingredient and method lists want more air than the theme default: these get
+   read a line at a time, off a phone, with wet hands. */
+.content {
+  ol > li {
+    margin-top: 0.6rem;
+  }
+
+  ul > li {
+    margin-top: 0.3rem;
+  }
+}
+
+.recipe-source {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--main-border-color);
+
+  h2 {
+    margin: 0 0 0.35rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--label-color);
+    border-bottom: none;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  /* A source URL is long: let it wrap rather than widen the page. */
+  a {
+    overflow-wrap: anywhere;
+  }
+}
+
+.muted {
+  color: var(--label-color);
+}

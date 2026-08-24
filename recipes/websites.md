@@ -2,7 +2,7 @@
 layout: page
 title: Recipe websites
 description: Sites to search first when looking for a new recipe.
-unlisted: true
+permalink: /recipes/websites/
 ---
 
 When I ask for a recipe, search these first, in order, before looking anywhere else.

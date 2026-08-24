@@ -4,9 +4,11 @@ I'm Francisco.
 
 📓 **[My notes →](https://frantrucco-proton.github.io/frantrucco-proton/)**
 
-A small personal reference site — recipes to start with, more sections to come.
-This repo is that site: a plain [Jekyll](https://jekyllrb.com) site built and
-served by GitHub Pages, with no theme gem and no build step.
+A small personal reference site — vegetarian recipes to start with, each one
+with its ingredients in both English and Dutch, more sections to come. This
+repo is that site: a [Jekyll](https://jekyllrb.com) site using the
+[Chirpy](https://github.com/cotes2020/jekyll-theme-chirpy) theme, built and
+deployed by GitHub Actions.
 
 ### Running it locally
 
