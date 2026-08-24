@@ -160,9 +160,9 @@ pwa:
 paginate: 10
 
 # The base URL of your site.
-# This is a project site, so pages are served under /frantrucco-proton/.
-# Set this to "" once the repo is renamed to frantrucco-proton.github.io.
-baseurl: "/frantrucco-proton"
+# This repo is named frantrucco-proton.github.io, so it is a user site
+# served from the root and this stays empty.
+baseurl: ""
 
 # ------------ The following options are not recommended to be modified ------------------
 

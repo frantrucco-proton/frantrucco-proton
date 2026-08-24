@@ -8,11 +8,14 @@ A small personal reference site published with **GitHub Pages**. Recipes are
 the first section; more will follow (Dutch taxes, notes on cities, useful
 websites for finding housing).
 
-- Live site: <https://frantrucco-proton.github.io/frantrucco-proton/>
-- This repo is currently also the GitHub **profile README** repo. Francisco has
-  decided to rename it to `frantrucco-proton.github.io` so the site is served
-  from the bare root; that rename ends the profile README (GitHub only renders
-  it from a repo named exactly after the user). See *Renaming* below.
+- Live site: <https://frantrucco-proton.github.io/>
+- The repo is named `frantrucco-proton.github.io`, which makes this a GitHub
+  Pages **user site**: it is served from the bare root, so `baseurl` is `""`.
+  Renaming the repo to anything else would push the site back under a path and
+  `baseurl` would have to be set to match.
+- This is no longer the profile README repo. That role belongs to a repo named
+  exactly `frantrucco-proton` — which this one used to be — so `README.md` here
+  is now just the repo's own README and no longer appears on the profile.
 
 **The live site is the only output.** Never build an offline bundle, a
 single-file HTML export, a PDF, or a zip of the site. If something should be
@@ -176,20 +179,6 @@ page with `layout: page` and an explicit `permalink:`, as `recipes/websites.md`
 does. To put something in the sidebar, add a file to `_tabs/` with an `icon:`
 (Font Awesome class) and an `order:`.
 
-## Renaming the repo
-
-Francisco has chosen to rename this repo to `frantrucco-proton.github.io` so
-the site is served from `https://frantrucco-proton.github.io/`. When that
-happens:
-
-1. Set `baseurl: ""` in `_config.yml` (it is `"/frantrucco-proton"` today).
-2. Update the live-site URL at the top of this file and in `README.md`.
-3. Point the local remote at the new name; GitHub redirects the old one, but
-   being explicit avoids surprises.
-
-The profile README stops rendering on the GitHub profile at that point. That
-is a known and accepted cost of the rename.
-
 ## Working in this repo
 
 **Work on `main` and push to `main`.** No feature branches, no pull requests,
@@ -200,13 +189,13 @@ unless Francisco asks for one in so many words.
 ```bash
 bundle install                 # first time only
 bundle exec jekyll build       # must finish without errors
-bundle exec jekyll serve       # http://127.0.0.1:4000/frantrucco-proton/
+bundle exec jekyll serve       # http://127.0.0.1:4000/
 ```
 
 Before pushing, run what CI runs, or CI will find it instead:
 
 ```bash
-JEKYLL_ENV=production bundle exec jekyll b -d "_site/frantrucco-proton"
+JEKYLL_ENV=production bundle exec jekyll b
 LANG=C.UTF-8 bundle exec htmlproofer _site --disable-external \
   --ignore-urls "/^http:\/\/127.0.0.1/,/^http:\/\/0.0.0.0/,/^http:\/\/localhost/"
 ```
