@@ -2,7 +2,7 @@
 layout: section
 title: Recipes
 order: 1
-description: Recipes worth cooking again, with the ingredients in both English and Dutch.
+description: Vegetarian recipes worth cooking again, with the ingredients in both English and Dutch.
 empty_message: No recipes saved yet.
 ---
 

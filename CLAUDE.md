@@ -122,6 +122,18 @@ URL**. Items 1 and 5 come from front matter and are rendered by
 
 ### Recipe rules
 
+- **Every recipe on the site is vegetarian.** No meat, poultry, or fish, in a
+  recipe I went looking for and in one handed to me alike. Watch the
+  ingredients that hide in otherwise-vegetarian dishes: meat or chicken stock
+  (Polish `rosół`, Dutch `runderbouillon`/`kippenbouillon`), lard (Polish
+  `smalec`, Dutch `reuzel`), bacon or `boczek`, gelatine, anchovies, fish
+  sauce, Worcestershire sauce, and animal rennet in hard cheeses like Parmesan.
+- **A recipe handed to me that is not vegetarian gets adapted, not skipped.**
+  Say so before saving it, substitute the offending ingredient, and name the
+  swap in `Substitutions and notes`: what the original used, what replaced it,
+  and anything it changes about the method. The page links to the original, so
+  every deviation from that original is stated on the page — never silently.
+  `diet:` describes the version on the page, not the source.
 - **No tables. Ever.** Ingredients are bulleted lists, method steps are a
   numbered list. This holds for both language versions.
 - The two ingredient lists must be the same ingredients in the same order, so
@@ -142,17 +154,10 @@ URL**. Items 1 and 5 come from front matter and are rendered by
 
 ## Finding a recipe
 
-**Search for vegetarian recipes only.** Whenever Francisco asks for a new
-recipe, what comes back should have no meat, poultry, or fish in it. Watch the
-ingredients that hide in otherwise-vegetarian dishes: meat or chicken stock
-(Polish `rosół`, Dutch `runderbouillon`/`kippenbouillon`), lard (Polish
-`smalec`, Dutch `reuzel`), bacon or `boczek`, gelatine, anchovies, fish sauce,
-Worcestershire sauce, and animal rennet in hard cheeses like Parmesan. If a
-dish is worth having but for one such ingredient, suggest it with the
-substitution named up front rather than saving it quietly.
-
-This applies to recipes I go looking for. A specific recipe handed to me gets
-saved as it is, whatever is in it.
+**Search for vegetarian recipes only** — see the first two Recipe rules above.
+Where a site has its own vegetarian category (aniagotuje.pl files them under
+`wegetariańskie`), search inside it rather than sifting general results by
+hand, and still read the ingredient list before proposing the recipe.
 
 `recipes/websites.md` is the list of sites to search **first**, in order,
 before looking anywhere else. Add new sites there as bullets.
@@ -185,6 +190,16 @@ Pages inside a section use `layout: page` (or a purpose-built layout, as
 recipes do) and need `title` plus a one-line `description`. Add
 `unlisted: true` to keep a page out of its section's list —
 `recipes/websites.md` uses this because it is a reference page, not a recipe.
+
+## Working in this repo
+
+**Work on `main` and push to `main`.** No feature branches, no pull requests,
+unless Francisco asks for one in so many words.
+
+GitHub Pages rebuilds the site from `main` on every push, so a push is a
+deploy. Build locally first — the section below is not optional here, because
+a failed build on GitHub Pages leaves the previous version live without
+saying anything.
 
 ## Verifying a change
 
