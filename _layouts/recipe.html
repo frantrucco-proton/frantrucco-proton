@@ -2,42 +2,26 @@
 layout: post
 ---
 {%- comment -%}
-  Wraps Chirpy's `post` layout so every recipe renders in the fixed order:
-  1. title + times / servings / diet   2. ingredients (English)
-  3. ingredients (Dutch)               4. method (English)
-  5. source URL
-  Items 1 and 5 come from front matter and are rendered here; 2-4 are the body
-  of the markdown file. See CLAUDE.md for the file template.
+  Wraps Chirpy's `post` layout. Renders the English name of the dish under the
+  title, and the source at the end. Everything between those -- ingredients,
+  the Recipe heading, the fact lines and the method -- is the body of the
+  markdown file. See CLAUDE.md for the file template.
 {%- endcomment -%}
 
-{%- capture meta -%}
-  {%- if page.prep_time %}<li><span class="k">Prep</span> {{ page.prep_time }}</li>{% endif -%}
-  {%- if page.cook_time %}<li><span class="k">Cook</span> {{ page.cook_time }}</li>{% endif -%}
-  {%- if page.total_time %}<li><span class="k">Total</span> {{ page.total_time }}</li>{% endif -%}
-  {%- if page.servings %}<li><span class="k">Makes</span> {{ page.servings }}</li>{% endif -%}
-  {%- if page.cuisine %}<li><span class="k">Cuisine</span> {{ page.cuisine }}</li>{% endif -%}
-{%- endcapture -%}
-
-{%- if meta != "" or page.diet %}
-<div class="recipe-head">
-  {%- if meta != "" %}
-  <ul class="recipe-meta">{{ meta }}</ul>
-  {%- endif %}
-  {%- if page.diet %}
-  {%- assign diet_list = page.diet | join: "|" | split: "|" %}
-  <ul class="recipe-diet">
-    {%- for t in diet_list %}<li>{{ t | strip }}</li>{% endfor %}
-  </ul>
-  {%- endif %}
-</div>
+{%- if page.title_en %}
+<p class="recipe-subtitle"><em>{{ page.title_en }}</em></p>
 {%- endif %}
 
 {{ content }}
 
-{%- if page.source_url %}
+{%- if page.source_url or page.source_note %}
 <div class="recipe-source">
   <h2 id="source">Source</h2>
+  {%- if page.source_url %}
   <p><a href="{{ page.source_url }}" rel="noopener nofollow">{{ page.source_url }}</a>
   {%- if page.source_lang %} <span class="muted">(original in {{ page.source_lang }})</span>{% endif %}</p>
+  {%- else %}
+  <p>{{ page.source_note }}</p>
+  {%- endif %}
 </div>
 {%- endif %}

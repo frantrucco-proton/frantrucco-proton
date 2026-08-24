@@ -13,65 +13,33 @@
 ';
 
 /* ---------------------------------------------------------------------------
-   Recipe furniture. Colours all come from Chirpy's own custom properties, so
-   light and dark modes follow the theme without a second set of rules.
+   Recipe furniture. Colours come from Chirpy's own custom properties, so light
+   and dark modes follow the theme without a second set of rules.
    --------------------------------------------------------------------------- */
 
-.recipe-head {
-  margin-bottom: 1.5rem;
+/* The English name of the dish, under the title. */
+.recipe-subtitle {
+  margin: -0.5rem 0 1.5rem;
+  color: var(--label-color);
+  font-size: 1.05rem;
 }
 
-.recipe-meta,
-.recipe-diet {
-  display: flex;
-  flex-wrap: wrap;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.recipe-meta {
-  gap: 0.4rem 0.45rem;
+/* Times, nutrition and diet, under the Recipe heading. */
+.recipe-facts {
+  margin-bottom: 1.4rem;
+  color: var(--label-color);
   font-size: 0.875rem;
-
-  li {
-    background: var(--card-bg);
-    border: 1px solid var(--main-border-color);
-    border-radius: 999px;
-    padding: 0.25rem 0.75rem;
-    color: var(--text-color);
-  }
-
-  .k {
-    color: var(--label-color);
-    margin-right: 0.35rem;
-    font-size: 0.8125rem;
-  }
+  line-height: 1.7;
 }
 
-.recipe-diet {
-  gap: 0.4rem;
-  margin-top: 0.5rem;
-  font-size: 0.8125rem;
-
-  li {
-    border: 1px solid var(--main-border-color);
-    border-radius: 999px;
-    padding: 0.15rem 0.6rem;
-    color: var(--label-color);
-  }
+/* Ingredients are read one line at a time, off a phone, with wet hands. */
+.content ul > li {
+  margin-top: 0.35rem;
 }
 
-/* Ingredient and method lists want more air than the theme default: these get
-   read a line at a time, off a phone, with wet hands. */
-.content {
-  ol > li {
-    margin-top: 0.6rem;
-  }
-
-  ul > li {
-    margin-top: 0.3rem;
-  }
+/* The blank line between the shopping list and the store-cupboard list. */
+.content ul + ul {
+  margin-top: 1.1rem;
 }
 
 .recipe-source {

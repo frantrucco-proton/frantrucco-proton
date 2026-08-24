@@ -41,10 +41,13 @@ that is available in GitHub Pages' native build, so:
 ```
 _config.yml              Chirpy configuration
 _layouts/recipe.html     the only custom layout; wraps Chirpy's `post`
+_includes/trending-tags.html   deliberately empty, see below
 _posts/                  one file per recipe, YYYY-MM-DD-<slug>.md
 _tabs/                   sidebar tabs (about, categories, tags, archives)
 _plugins/                posts-lastmod-hook.rb, from the Chirpy starter
 assets/css/jekyll-theme-chirpy.scss   theme entry point plus custom recipe styles
+assets/img/avatar.svg    the 🥟 in the sidebar: the emoji as SVG text, so it
+                         renders in each visitor's own emoji font
 recipes/websites.md      sites to search for recipes (a page, not a post)
 index.html               front page, rendered by Chirpy's `home` layout
 ```
@@ -52,6 +55,12 @@ index.html               front page, rendered by Chirpy's `home` layout
 Everything else — layouts, includes, JavaScript, icons — comes from the gem.
 Do not vendor copies of theme files; override through `_layouts/` or the SCSS
 entry point instead, so the theme can be upgraded by bumping the gem.
+
+Jekyll resolves an include from the site before the gem, which is how the
+Trending Tags widget is switched off: `_includes/trending-tags.html` exists here
+and is empty, so it renders nothing in either the sidebar panel or the search
+results. That is much less to maintain than a vendored copy of the theme's
+`_layouts/default.html`, which is where the widget is included from.
 
 ## Adding a recipe
 
@@ -72,48 +81,81 @@ Copy this exactly. The order of the sections is fixed.
 
 ```markdown
 ---
-layout: recipe                                         # not Chirpy's default `post`
-title: Leczo warzywne
+layout: recipe
+title: Zupa kurkowa                          # the dish's name in its own language
+title_en: Chanterelle soup                   # shown in italics under the title
 date: 2026-08-24 12:00:00 +0200
-categories: [Recipes, Polish]                          # always [Recipes, <cuisine>]
-tags: [vegetarian, one-pot, peppers]                   # lowercase
-description: Polish pepper and courgette stew          # one line, shown in the list
-cuisine: Polish
-prep_time: 15 min                                      # omit any field the source lacks
-cook_time: 40 min
-servings: 4
-diet: [vegetarian, vegan]                              # a YAML list; omit if the source has no tags
-source_url: https://aniagotuje.pl/przepis/leczo-warzywne
+categories: [Recipes, Soup]                  # always [Recipes, <type of food>]
+tags: [polish, vegetarian, chanterelles]     # lowercase; the cuisine is a tag
+description: Polish soup of chanterelles, potatoes and dill
+source_url: https://aniagotuje.pl/przepis/zupa-kurkowa-z-koperkiem
 source_lang: Polish
 ---
 
-## Ingredients (English)
+## Ingredients (2 people)
 
-- ...
+- 300 g chanterelles (cantharellen)
+- 300 g potatoes
+- 3 tbsp sour cream, e.g. 18% (zure room)
 
-## Ingredients (Dutch)
+<!-- -->
 
-- ...
+- 2 tbsp butter
+- 1 litre vegetable stock
+- ½ tsp each of salt and pepper
 
-## Method
+## Recipe
 
-1. ...
+Prep 20 min · Cook 40 min · Makes 2 kg of soup<br>
+Per 100 g: 46 kcal · 6 g carbs (1 g sugars) · 1 g protein · 2 g fat<br>
+Gluten-free, low-sugar, vegetarian
+{: .recipe-facts }
 
-## Substitutions and notes                             # only when there is something to say
+Pour the vegetable stock into a pot and start heating it. Peel the washed
+potatoes, dice them and add them to the stock...
 
-- ...
+## Notes                                     # only when there is something to say
+
+Fresh chanterelles are seasonal and expensive here; frozen ones from a Polish
+shop work just as well...
 ```
 
-`layout: recipe` matters: Chirpy's default for posts is `layout: post`, which
-would drop the times, the diet tags and the source link. `_layouts/recipe.html`
-renders those around the body, producing the required order — **title with
-times, servings and diet tags → English ingredients → Dutch ingredients →
-method in English → source URL**. Do not repeat the title or the source link in
-the body.
+`layout: recipe` matters: it renders `title_en` under the title and the source at
+the end, which Chirpy's stock `post` layout would not. Do not repeat the title or
+the source link in the body.
 
-Where a source splits its ingredients into groups, keep the groups, as a bold
-lead-in above each bulleted list, and keep them identical in both languages
-(see `risotto-z-kurkami`).
+A recipe with no written original — one told out loud, say — takes a
+`source_note:` instead of `source_url:`, and the layout prints that in the same
+place. Every recipe says where it came from.
+
+### How a recipe is written
+
+- **The method is prose.** No numbered steps and no bullets: group the source's
+  steps into three to five paragraphs that read like someone talking you through
+  it. This is the biggest departure from how recipe sites write, and it is
+  deliberate.
+- **One ingredient list, in two blocks.** First what has to be shopped for,
+  then what is probably already in the kitchen — oil, butter, stock, salt,
+  pepper, dried spices. The point is that the first block is the shopping list.
+  Separate them with a `<!-- -->` line: kramdown treats two bullet blocks with
+  only a blank line between them as one list, and changing the bullet character
+  does not split them either, so the empty comment is what actually produces two
+  lists and the gap between them.
+- **Dutch names in brackets after the English**, in the shopping block only, and
+  only for things identified by reading a label rather than by sight:
+  `chanterelles (cantharellen)`, `passata (gezeefde tomaten)`,
+  `breadcrumbs (paneermeel)`. Not potatoes, onions, garlic or tomatoes — those
+  are recognisable in any shop.
+- **The heading is always `Ingredients (2 people)`**, whatever the batch makes.
+  The real yield goes on the fact line below, where `Makes 2.5 kg` tells you it
+  is really six dinners.
+- **Three fact lines**, in this order, joined with `<br>` and closed by
+  `{: .recipe-facts }`: times and yield; the source's nutrition per 100 g; the
+  diet tags. Drop any line the source cannot fill — a recipe with no nutrition
+  figures simply has two.
+- **Notes are short prose**, not a list, and only appear when there is something
+  that has to be said: a substitution made, an ingredient that is hard to find
+  here, a unit converted.
 
 ### Recipe rules
 
@@ -125,18 +167,14 @@ lead-in above each bulleted list, and keep them identical in both languages
   sauce, Worcestershire sauce, and animal rennet in hard cheeses like Parmesan.
 - **A recipe handed to me that is not vegetarian gets adapted, not skipped.**
   Say so before saving it, substitute the offending ingredient, and name the
-  swap in `Substitutions and notes`: what the original used, what replaced it,
-  and anything it changes about the method. The page links to the original, so
-  every deviation from that original is stated on the page — never silently.
-  `diet:` describes the version on the page, not the source.
+  swap in `Notes`: what the original used, what replaced it, and anything it
+  changes about the method. The page links to the original, so every deviation
+  from that original is stated on the page — never silently. The diet line
+  describes the version on the page, not the source.
 - Where a source offers a choice that straddles the rule — "chicken or
   vegetable stock" — take the vegetarian option and say on the page that this
   is what the page does.
-- **No tables. Ever.** Ingredients are bulleted lists, method steps are a
-  numbered list. This holds for both language versions.
-- The two ingredient lists must be the same ingredients in the same order, so
-  they can be read side by side.
-- Method is English only.
+- **No tables. Ever.**
 - **Translate from the source language, not from a guess.** Check the original
   words rather than reasoning from a rough English translation, especially
   mushrooms, fish, and cuts of meat, where a wrong guess produces a plausible
@@ -145,12 +183,13 @@ lead-in above each bulleted list, and keep them identical in both languages
   bay bolete, not "brown mushroom"; `karkówka` is pork collar/neck, not "pork
   chop"). Dutch names come from what Dutch supermarkets actually print on the
   packet — `gezeefde tomaten`, `gerookte paprikapoeder`, `sperziebonen` — not a
-  literal rendering of the English.
-- **Flag anything hard to find in the Netherlands** in `Substitutions and
-  notes`, with a concrete substitute and where to look (Polish shop, toko,
-  Turkish supermarket). Example: Polish `twaróg` — closest is Dutch
-  `kwark`/`hüttenkäse`, or the real thing from a Polish shop.
-- Keep quantities in metric, as the source has them.
+  literal rendering of the English. `snijbonen` are not `sperziebonen`.
+- Keep quantities in metric, as the source has them. Convert Polish kitchen
+  units and say so in `Notes`: a `szklanka` is 250 ml, a `kostka masła` is a
+  200 g block.
+- If the source gives no quantities — a recipe told out loud — scale them from a
+  comparable recipe already on the site and say in `Notes` that they are
+  inferred and approximate.
 
 ## Finding a recipe
 
@@ -170,9 +209,14 @@ original.
 
 ## Adding a new section
 
-Sections are **categories**. A new one needs no configuration: give the posts
-`categories: [Dutch taxes, ...]` and the category appears on the Categories tab
-with its posts under it.
+Sections are **top-level categories**. A new one needs no configuration: give
+the posts `categories: [Dutch taxes, ...]` and the category appears on the
+Categories tab with its posts under it.
+
+The second level says what kind of thing the post is, not where it is from. For
+recipes that means the type of food — Soup, Stew, Rice, Vegetables, Pasta — so
+the Categories tab answers "what do I feel like cooking". The cuisine is a tag
+(`polish`, `italian`), not a category.
 
 For a section that is a single reference page rather than a set of posts, add a
 page with `layout: page` and an explicit `permalink:`, as `recipes/websites.md`
