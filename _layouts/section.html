@@ -1,0 +1,41 @@
+---
+layout: default
+---
+{%- comment -%}
+  A top-level section index. Every page that sits in the same folder is listed
+  automatically, sorted by title, so adding an entry never means editing this
+  page. Give a page `unlisted: true` to keep it out of the list.
+{%- endcomment -%}
+<div class="page-head">
+  <h1>{{ page.title }}</h1>
+  {%- if page.description %}<p class="lede">{{ page.description }}</p>{% endif %}
+</div>
+
+<div class="prose section-intro">
+  {{ content }}
+</div>
+
+{%- comment -%}
+  One condition per where_exp: GitHub Pages builds with Jekyll 3.x, whose
+  where_exp does not support `and`/`or` in the expression.
+{%- endcomment -%}
+{%- assign prefix = page.path | remove: "index.md" -%}
+{%- assign entries = site.pages | where_exp: "p", "p.path contains prefix" -%}
+{%- assign entries = entries | where_exp: "p", "p.path != page.path" -%}
+{%- assign entries = entries | where_exp: "p", "p.unlisted != true" -%}
+{%- assign entries = entries | sort: "title" %}
+{%- if entries.size > 0 %}
+<ul class="entry-list">
+  {%- for e in entries %}
+  <li class="entry">
+    <a class="entry-link" href="{{ e.url | relative_url }}">
+      <span class="entry-title">{{ e.title }}</span>
+      {%- assign blurb = e.description | default: e.cuisine -%}
+      {%- if blurb %}<span class="entry-desc">{{ blurb }}</span>{% endif %}
+    </a>
+  </li>
+  {%- endfor %}
+</ul>
+{%- else %}
+<p class="empty">{{ page.empty_message | default: "Nothing here yet." }}</p>
+{%- endif %}

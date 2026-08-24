@@ -1,16 +1,19 @@
-## Hi there 👋
+## Hi 👋
 
-<!--
-**frantrucco-proton/frantrucco-proton** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+I'm Francisco.
 
-Here are some ideas to get you started:
+📓 **[My notes →](https://frantrucco-proton.github.io/frantrucco-proton/)**
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+A small personal reference site — recipes to start with, more sections to come.
+This repo is that site: a plain [Jekyll](https://jekyllrb.com) site built and
+served by GitHub Pages, with no theme gem and no build step.
+
+### Running it locally
+
+```bash
+bundle install
+bundle exec jekyll serve   # http://127.0.0.1:4000/frantrucco-proton/
+```
+
+How the site is organised, and how to add a recipe or a new section, is written
+down in [CLAUDE.md](CLAUDE.md).

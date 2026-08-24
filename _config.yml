@@ -1,0 +1,38 @@
+# ---------------------------------------------------------------------------
+# Site settings. See CLAUDE.md for how the site is organised.
+# ---------------------------------------------------------------------------
+title: Francisco's Notes
+tagline: A small personal reference site.
+description: >-
+  Recipes and other things worth writing down.
+
+# This repo is published as a GitHub Pages *project* site, so every page lives
+# under /frantrucco-proton/. If the repo is ever renamed to
+# frantrucco-proton.github.io, or a custom domain is added, set baseurl to ""
+# and update url. Always link with the `relative_url` filter so this keeps
+# working either way.
+url: https://frantrucco-proton.github.io
+baseurl: /frantrucco-proton
+
+# recipes/leczo-warzywne.md  ->  /recipes/leczo-warzywne/
+permalink: pretty
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+# No theme gem and no plugins: the layouts in _layouts/ and the stylesheet in
+# assets/css/ are the whole design. GitHub Pages builds this as-is.
+plugins: []
+
+# Repo files that are not part of the published site.
+exclude:
+  - CLAUDE.md
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .sass-cache
+  - .jekyll-cache
+  - node_modules
