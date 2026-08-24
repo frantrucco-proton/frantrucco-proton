@@ -142,6 +142,18 @@ URL**. Items 1 and 5 come from front matter and are rendered by
 
 ## Finding a recipe
 
+**Search for vegetarian recipes only.** Whenever Francisco asks for a new
+recipe, what comes back should have no meat, poultry, or fish in it. Watch the
+ingredients that hide in otherwise-vegetarian dishes: meat or chicken stock
+(Polish `rosół`, Dutch `runderbouillon`/`kippenbouillon`), lard (Polish
+`smalec`, Dutch `reuzel`), bacon or `boczek`, gelatine, anchovies, fish sauce,
+Worcestershire sauce, and animal rennet in hard cheeses like Parmesan. If a
+dish is worth having but for one such ingredient, suggest it with the
+substitution named up front rather than saving it quietly.
+
+This applies to recipes I go looking for. A specific recipe handed to me gets
+saved as it is, whatever is in it.
+
 `recipes/websites.md` is the list of sites to search **first**, in order,
 before looking anywhere else. Add new sites there as bullets.
 
